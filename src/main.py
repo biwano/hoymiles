@@ -2,9 +2,8 @@ from hoymilesapi import Hoymiles
 from dotenv import load_dotenv
 import os
 from datetime import datetime
+import json
 load_dotenv()
-
-print(os.getenv("PLANT_ID"))
 
 
 g_envios = {
@@ -17,8 +16,11 @@ config ={
     "HOYMILES_PASSWORD": os.getenv("HOYMILES_PASSWORD"),
 }
 
-hoymiles = Hoymiles(os.getenv("PLANT_ID"), config, g_envios)
+hoymiles = Hoymiles(os.getenv("PLANT_ID"), config, g_envios, meter=True)
 
+hoymiles.get_plant_hw()
+hoymiles.update_devices_status()
 data = hoymiles.get_solar_data()
+hoymiles.get_alarms()
 
-print(data)
+print(json.dumps(hoymiles.solar_data, indent=4))
